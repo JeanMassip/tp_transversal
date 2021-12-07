@@ -51,7 +51,7 @@ class Vehicule:
             "message": {
                 "station_ID": self.stationID,
                 "station_type": self.stationType,
-                "speed": random.randint(30, 50),
+                "speed": random.randint(20, 30),
                 "heading": self.heading,
                 "position": "une position"
             }

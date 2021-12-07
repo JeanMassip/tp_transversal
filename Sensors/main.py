@@ -1,7 +1,13 @@
-import getopt, sys
+import getopt, sys, os
 import random, time 
 
 from vehicule import Vehicule, VehiculeType
+from dotenv import load_dotenv
+
+load_dotenv()
+MAX_MESSAGES = int(os.getenv("MAX_MESSAGES"))
+SLOW_START = int(os.getenv("SLOW_START"))
+SLOW_STOP = int(os.getenv("SLOW_STOP"))
 
 def main(argv):
     type = VehiculeType.ORDINARY
@@ -26,11 +32,11 @@ def main(argv):
     
     vec = Vehicule(random.randint(0,1000), type)
 
-    while sentMessages < 35:
+    while sentMessages < MAX_MESSAGES:
         time.sleep(1)
-        if sentMessages < 10:
+        if sentMessages < SLOW_START:
             vec.default()
-        elif sentMessages > 10 and sentMessages < 20:
+        elif sentMessages > SLOW_START and sentMessages < SLOW_STOP:
             vec.slowed()
         else:
             vec.default()
