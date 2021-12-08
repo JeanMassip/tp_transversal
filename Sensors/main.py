@@ -30,7 +30,7 @@ def main(argv):
             elif arg == "OPERATOR":
                 type == VehiculeType.OPERATOR
     
-    vec = Vehicule(random.randint(0,1000), type)
+    vec = Vehicule(random.randint(1,1000), type)
 
     while sentMessages < MAX_MESSAGES:
         time.sleep(1)

@@ -2,6 +2,14 @@ import logging
 import queue, threading, json, datetime
 
 from paho.mqtt import client as mqtt_client
+from enum import IntEnum
+
+class DENMEvent(IntEnum):
+    ROADWORK = 3
+    ACCIDENT = 4
+    TRAFFICJAM = 5
+    SLIPPERYROAD = 6
+    FOG = 7
 
 class DENMHandler:
     def __init__(self, host, port, message_queue:queue.Queue) -> None:
@@ -29,9 +37,41 @@ class DENMHandler:
             vehicule_id = msg["station_id"]
 
             if vehicule_id in self.vehicules.keys():
-                self.vehicules[vehicule_id].append(int(msg["causeCode"]))
+                self.vehicules[vehicule_id]["events"].append(DENMEvent(int(msg["causeCode"])))
             else:
-                self.vehicules[vehicule_id] = [int(msg["causeCode"])]
+                if int(msg["causeCode"]) not in self.vehicules[vehicule_id]:
+                    self.vehicules[vehicule_id]["events"].append(DENMEvent(int(msg["causeCode"])))
+            
+            self.vehicules[vehicule_id]["last_seen"] = datetime.datetime.now()
+    
+    def checkEvents(self):
+        for data in DENMEvent:
+            occurences = 0
+            for key, vehicule in self.vehicules:
+                if data.value in vehicule["events"]:
+                    occurences += 1
+            if occurences > 2:
+                self.raiseEvent(data.value)
+    
+    def raiseEvent(self, eventID):
+        message = {
+            "message": {
+                "stationID": 0,
+                "stationType": 0,
+                "causeCode": eventID,
+                "position": "une position"
+            }
+        }
+
+        msg = json.dumps(message)
+        result = self.client.publish("/gw/events", msg)
+        status = result[0]
+        if status == 0:
+            logging.info("Message sent !")
+        else:
+            logging.error(f"Failed to send message, error : {status}")
+
+            
 
 class CAMHandler:
     def __init__(self, host, port, message_queue:queue.Queue) -> None:
@@ -70,7 +110,7 @@ class CAMHandler:
             self.check_speed()
 
     def check_speed(self) -> None:
-        for index, vehicule in self.vehicules:
+        for key, vehicule in self.vehicules:
             if vehicule["speed"] >= 80 and vehicule["slowed"] == True:
                 vehicule["slowed"] = False
                 self.nb_slowed += 1
@@ -80,14 +120,14 @@ class CAMHandler:
                 self.nb_slowed += 1
             
             if self.nb_slowed > 2:
-                self.send_slowed_event(index)
+                self.send_slowed_event(key)
     
     def purge_vehicules(self) -> None:
         now = datetime.datetime.now()
-        for index, vehicule in self.vehicules:
+        for key, vehicule in self.vehicules:
             last_seen = vehicule["last_seen"]
             if ((now - last_seen).second) > 15:
-                del self.vehicules[index]
+                del self.vehicules[key]
 
     def send_slowed_event(self, index) -> None:
         message = {
