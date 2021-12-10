@@ -36,7 +36,7 @@ class Vehicule:
     def default(self) -> None:
         message = {
             "message": {
-                "station_ID": self.stationID,
+                "station_id": self.stationID,
                 "station_type": self.stationType,
                 "speed": random.randint(80, 90),
                 "heading": self.heading,
@@ -49,7 +49,7 @@ class Vehicule:
     def slowed(self) -> None:
         message = {
             "message": {
-                "station_ID": self.stationID,
+                "station_id": self.stationID,
                 "station_type": self.stationType,
                 "speed": random.randint(20, 30),
                 "heading": self.heading,
