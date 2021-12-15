@@ -1,8 +1,6 @@
-import bson.json_util as json_util
-
+import json
 from bson.objectid import ObjectId
 from pymongo import MongoClient
-
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -10,11 +8,15 @@ app = Flask(__name__)
 @app.get("/events")
 def get_events():
     collection = get_collection()
+    result = []
     if collection == None:
         return {"error": "Failed to connect to DB"}, 500
     events = collection.find()
-    json_data = json_util.dumps(events)
-    return json_data, 200
+    for event in events:
+        event["_id"] = str(event["_id"])
+        result.append(event)
+
+    return jsonify(result)
 
 @app.get("/events/<id>")
 def get_event(id):
@@ -24,6 +26,8 @@ def get_event(id):
     event = collection.find_one({"_id": ObjectId(id)})
     if len(event) == 0:
         return {"error":"No event with this id"}, 404
+    event["_id"] = str(event["_id"])
+    return jsonify(event)
 
 @app.post("/events")
 def create_event():
