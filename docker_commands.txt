@@ -1,0 +1,2 @@
+sudo docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.9-management // Container RabbitMQ
+sudo docker run -it -v mongodata:/data/db -p 27017:27017 --name mongodb -d mongo:latest
