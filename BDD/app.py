@@ -48,3 +48,6 @@ def get_collection():
         return None
     db = client['tp_transversam']
     return db["denm_events"]
+
+if __name__ == "__main__":
+    app.run(debug=True)
