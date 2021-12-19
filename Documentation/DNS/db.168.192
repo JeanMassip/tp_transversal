@@ -1,0 +1,22 @@
+; Fichier de zone inverse pour la zone inversee 168.192.in-addr.arpa
+; en correspondance avec la zone normale projet.local
+$TTL	86400
+
+168.192.in-addr.arpa.	IN	SOA	gestinfra.projet.local. kossi.projet.local. (
+			      10	; Serial
+			 604800		; Refresh
+			  30		; Retry
+			2419200		; Expire
+			  86400 )	; Negative Cache TTL
+;
+168.192.in-addr.arpa.	IN	NS	gestinfra.projet.local.
+1.1.168.192.in-addr.arpa.	IN	PTR	vmubuntu.projet.local.
+1.0.168.192.in-addr.arpa.	IN	PTR	vmubuntu.projet.local.
+2.1.168.192.in-addr.arpa.	IN	PTR	passerelle.projet.local.
+2.0.168.192.in-addr.arpa.	IN	PTR	passerelle.projet.local.
+3.1.168.192.in-addr.arpa.	IN	PTR	gestinfra.projet.local.
+4.1.168.192.in-addr.arpa.	IN	PTR	web.projet.local.
+5.1.168.192.in-addr.arpa.	IN	PTR	centraleven.projet.local.
+6.1.168.192.in-addr.arpa.	IN	PTR	filetampon.projet.local.
+7.1.168.192.in-addr.arpa.	IN	PTR	sauvegarde.projet.local.
+
