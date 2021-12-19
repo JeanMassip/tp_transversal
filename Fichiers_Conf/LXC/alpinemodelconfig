@@ -1,0 +1,42 @@
+# Template used to create this container: /usr/share/lxc/templates/lxc-download
+# Parameters passed to the template: --dist alpine --release 3.15 --arch amd64 --no-validate
+# Template script checksum (SHA-1): 273c51343604eb85f7e294c8da0a5eb769d648f3
+# For additional config options, please look at lxc.container.conf(5)
+
+# Uncomment the following line to support nesting containers:
+#lxc.include = /usr/share/lxc/config/nesting.conf
+# (Be aware this has security implications)
+
+
+# Distribution configuration
+lxc.include = /usr/share/lxc/config/common.conf
+lxc.arch = linux64
+
+# Container specific configuration
+lxc.rootfs.path = dir:/var/lib/lxc/alpinemodel/rootfs
+lxc.uts.name = alpinemodel
+
+# Network configuration
+lxc.net.0.type = veth
+lxc.net.0.link = lxcbr0
+lxc.net.0.flags = up
+lxc.net.0.hwaddr = 00:16:3e:4f:fe:72
+
+# Limit RAM to 100 Mo when all the available RAM is used by host
+# computer processes
+# else, the container will used all RAM available on the host computer 
+
+lxc.cgroup.memory.limit_in_bytes = 104857600
+
+# Limit usage to the Core 0 of all CPU Cores
+
+lxc.cgroup.cpuset.cpus = 0
+
+# LImit CPU Core Usage to 90% (900) for the CPU Core 0
+# If others uses the container, this pourcentage will be
+# splitted in number of containers that are using the CPU Core
+# Exemple : 2 container ==> 100/2 = 50% for each container
+# Exemple : 3 container ==> 100/3 = 33% for each container
+# Exemple : 10 container ==> 100/10 = 10% for each container
+
+lxc.cgroup.cpu.shares = 1000
