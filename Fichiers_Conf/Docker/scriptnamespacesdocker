@@ -1,0 +1,44 @@
+#/bin/bash
+
+# le bridge existe déja
+# Mettre en place un argument ?
+
+
+# if name in {web] :
+#	ipa = 192.168.1.2
+#
+#
+#
+
+bridge=dbr0
+container=debian1
+nettype=none
+
+sudo docker start --net=$nettype --name $container
+pid=`docker inspect -f '{{.State.Pid}}' $container`
+
+ln -s /var/run/docker/netns/ /var/run/netns
+
+netns=`ip a netns identify $pid`
+
+# Veth name assignement
+
+hostveth=veth0$container
+containerveth=veth1$container
+
+# Veth creation
+
+sudo ip link add hostveth type veth peer name containerveth
+sudo ip link set containerveth netns $netns
+
+# add if to bridge
+
+sudo brctl addif $bridge $hostveth
+
+# Assign ip to container veth
+
+sudo ip netns exec $bridge ip addr add $ipa dev $containerveth
+
+# enable hostveth
+
+sudo ip link set $hostveth up
