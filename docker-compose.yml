@@ -9,7 +9,7 @@ services:
     ports:
       - 27017:27017
   api:
-    build: ./BDD
+    build: ./API_BDD
     restart: on-failure
     cap_add:
       - NET_ADMIN
@@ -17,4 +17,29 @@ services:
       - database
     ports:
       - 5000:5000
+  broker:
+    build: ./Broker
+    restart: on-failure
+    cap_add:
+      - NET_ADMIN
+  consumer:
+    build: ./Consumer
+    restart: on-failure
+    cap_add:
+      - NET_ADMIN
+  event_central:
+    build: ./EventCentral
+    restart: on-failure
+    cap_add:
+      - NET_ADMIN
+  file_tampon:
+    build: ./FileTampon
+    restart: on-failure
+    cap_add:
+      - NET_ADMIN
+  web:
+    build: ./PlateformeWEB
+    restart: on-failure
+    cap_add:
+      - NET_ADMIN
   

@@ -1,4 +1,6 @@
-import random, json
+import random
+import json
+import os
 
 from enum import Enum
 from paho.mqtt import client as mqtt
@@ -10,14 +12,16 @@ class VehiculeType(str, Enum):
     OPERATOR = 15
 
 
-broker = "localhost"
-port = 1883
+broker = os.getenv("BROKER_ADDR")
+port = os.getenv("BROKER_PORT")
+
 
 class Vehicule:
-    def __init__(self, stationID:int, stationType:VehiculeType) -> None:
+    def __init__(self, stationID: int, stationType: VehiculeType) -> None:
         self.stationID = stationID
         self.stationType = stationType
-        self.heading = random.choice([0,180])
+        self.heading = random.choice([0, 180])
+
         def on_connect(client, userdata, flags, rc):
             if rc == 0:
                 print("Connected to MQTT Broker!")
@@ -31,8 +35,7 @@ class Vehicule:
 
     def __del__(self):
         self.client.disconnect()
-        
-    
+
     def default(self) -> None:
         message = {
             "message": {
@@ -58,8 +61,8 @@ class Vehicule:
         }
 
         self._send_message(message, "/sensors/cam")
-    
-    def _send_message(self, message:dict, topic:str) -> None:
+
+    def _send_message(self, message: dict, topic: str) -> None:
         msg = json.dumps(message)
         result = self.client.publish(topic, msg)
         status = result[0]
@@ -67,5 +70,3 @@ class Vehicule:
             print(f"Message sent !")
         else:
             print(f"Failed to send message...")
-
-
