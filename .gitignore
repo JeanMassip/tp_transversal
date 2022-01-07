@@ -2,6 +2,6 @@ Sensors/sensors
 Broker/broker
 EventCentral/eventcentral
 FileTampon/filetampon
-BDD/api_bdd
+API_BDD/api_bdd
 Consumer/consumer
 PlateformeWEB/web

@@ -40,7 +40,7 @@ def create_event():
     return {"error": "Request must be JSON"}, 415
 
 def get_collection():
-    client = MongoClient("mongodb://localhost:27017/")
+    client = MongoClient("mongodb://database:27017/")
     try:
         client.admin.command("ismaster")
     except ConnectionError:
@@ -50,4 +50,4 @@ def get_collection():
     return db["denm_events"]
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True)

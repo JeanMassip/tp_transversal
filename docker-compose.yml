@@ -1,0 +1,20 @@
+version: '3'
+services:
+  database:
+    image: mongo:latest
+    container_name: mongodb
+    user: root
+    volumes:
+      - /mongodata:/data/db
+    ports:
+      - 27017:27017
+  api:
+    build: ./BDD
+    restart: on-failure
+    cap_add:
+      - NET_ADMIN
+    depends_on:
+      - database
+    ports:
+      - 5000:5000
+  
