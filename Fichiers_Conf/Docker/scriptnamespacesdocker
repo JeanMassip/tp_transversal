@@ -3,17 +3,14 @@
 # le bridge existe déja
 # Mettre en place un argument ?
 
-
 # if name in {web] :
-#	ipa = 192.168.1.2
-#
-#
-#
+#	
 
 # Définition du nom du container, bridge et type de réseau docker
 bridge=brinfra
 container=debian1
 nettype=none
+ipa =192.168.1.2
 gateway=192.168.1.254
 
 # Démarrage et récupération du pid du container
@@ -22,7 +19,7 @@ pid=`docker inspect -f '{{.State.Pid}}' $container`
 
 # Lien symbolique pour avoir accès
 # aux namespaces docker
-ln -s /var/run/docker/netns/ /var/run/netns
+sudo ln -s /var/run/docker/netns/ /var/run/netns
 
 # Identification du namespace du container
 netns=`ip netns identify $pid`
