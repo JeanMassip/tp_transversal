@@ -28,8 +28,8 @@ containerveth=veth1$container
 
 # Veth creation
 
-sudo ip link add hostveth type veth peer name containerveth
-sudo ip link set containerveth netns $netns
+sudo ip link add $hostveth type veth peer name $containerveth
+sudo ip link set $containerveth netns $netns
 
 # add if to bridge
 
