@@ -37,7 +37,7 @@ sudo brctl addif $bridge $hostveth
 
 # Assign ip to container veth
 
-sudo ip netns exec $bridge ip addr add $ipa dev $containerveth
+sudo ip netns exec $netns ip addr add $ipa dev $containerveth
 
 # enable hostveth
 
