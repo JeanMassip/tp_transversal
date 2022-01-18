@@ -17,7 +17,7 @@ nettype=none
 gateway=192.168.1.254
 
 # Démarrage et récupération du pid du container
-sudo docker start --net=$nettype --name $container
+# sudo docker start --net=$nettype --name $container
 pid=`docker inspect -f '{{.State.Pid}}' $container`
 
 # Lien symbolique pour avoir accès
