@@ -46,6 +46,7 @@ sudo ip netns exec $netns ip addr add $ipa dev $containerveth
 
 # Ajout d'une règle par défaut dans le container
 # pour permettre l'accès aux réseaux extérieur
+sudo ip netns exec $netns ip addr add 192.168.4.0/24 dev veth1
 sudo ip netns exec $netns ip route add default via $gateway
 
 # Activation du veth sur l'hôte
