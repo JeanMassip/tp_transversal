@@ -19,7 +19,7 @@ pid=`docker inspect -f '{{.State.Pid}}' $container`
 
 ln -s /var/run/docker/netns/ /var/run/netns
 
-netns=`ip a netns identify $pid`
+netns=`ip netns identify $pid`
 
 # Veth name assignement
 
