@@ -10,35 +10,38 @@
 #
 #
 
-bridge=dbr0
+# Définition du nom du container, bridge et type de réseau docker
+bridge=brinfra
 container=debian1
 nettype=none
 
+# Démarrage et récupération du pid du container
 sudo docker start --net=$nettype --name $container
 pid=`docker inspect -f '{{.State.Pid}}' $container`
 
+# Lien symbolique pour avoir accès
+# aux namespaces docker
 ln -s /var/run/docker/netns/ /var/run/netns
 
+# Identification du namespace du container
 netns=`ip netns identify $pid`
 
-# Veth name assignement
+# Assignation des noms à donner
+# aux veth
 
 hostveth=veth0$container
 containerveth=veth1$container
 
-# Veth creation
-
+# Création des 2 veth, côté hôté et container
 sudo ip link add $hostveth type veth peer name $containerveth
 sudo ip link set $containerveth netns $netns
 
-# add if to bridge
-
+# Ajout du veth côté hôte
+# au bridge sur l'hôte
 sudo brctl addif $bridge $hostveth
 
-# Assign ip to container veth
-
+# Assignation d'une ip au veth dans le container
 sudo ip netns exec $netns ip addr add $ipa dev $containerveth
 
-# enable hostveth
-
+# Activation du veth sur l'hôte
 sudo ip link set $hostveth up
