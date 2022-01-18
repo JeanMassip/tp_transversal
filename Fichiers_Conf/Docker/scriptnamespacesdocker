@@ -14,6 +14,7 @@
 bridge=brinfra
 container=debian1
 nettype=none
+gateway=192.168.1.254
 
 # Démarrage et récupération du pid du container
 sudo docker start --net=$nettype --name $container
@@ -42,6 +43,10 @@ sudo brctl addif $bridge $hostveth
 
 # Assignation d'une ip au veth dans le container
 sudo ip netns exec $netns ip addr add $ipa dev $containerveth
+
+# Ajout d'une règle par défaut dans le container
+# pour permettre l'accès aux réseaux extérieur
+sudo ip netns exec $netns ip route add default via $gateway
 
 # Activation du veth sur l'hôte
 sudo ip link set $hostveth up
