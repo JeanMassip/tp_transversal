@@ -1,6 +1,6 @@
 FROM python:3.8-alpine
 # Copie des fichiers d'applicatif et entrypoint
-COPY main.py requirements.txt entrypoint.sh .
+COPY main.py requirements.txt events.py entrypoint.sh .
 # Mise à jour du dépôt et des paquets
 RUN apk update && apk upgrade
 # Installation des paquets essentiels
