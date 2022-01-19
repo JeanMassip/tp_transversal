@@ -11,4 +11,6 @@ COPY filetamponsyslog-ng.conf /etc/syslog-ng/syslog-ng.conf
 RUN pip install -r requirements.txt
 # Définition de l'entrypoint à lancer
 # au démaragge du container
+EXPOSE ..
+EXPOSE ..
 ENTRYPOINT ["./ip.sh"]
