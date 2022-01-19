@@ -1,15 +1,16 @@
 FROM python:latest
-
-ADD main.py .
-ADD requirements.txt .
-
+# Copie des fichiers d'applicatif et entrypoint
+COPY main.py requirements.txt entrypoint.sh .
+# Mise à jour du dépôt et des paquets
+RUN apk update && apk upgrade
+# Installation des paquets essentiels
+RUN apk add openssh-server openssh-client syslog-ng bind-tools
+# Copie du fichier de conf syslog
+COPY filetamponsyslog-ng.conf /etc/syslog-ng/syslog-ng.conf
+# Instllation des dépendances pythons
 RUN pip install -r requirements.txt
-
-#Commands required to connect container to network
-RUN ip a flush eth0
-#Replace with specfic IP
-RUN ip a add 192.168.1.9
-RUN ip r add 192.168.1.0/24 dev eth0
-RUN ip r add default via 192.168.1.1 dev eth0
-
-ENTRYPOINT [ "python", "./app.py" ]
+# Définition de l'entrypoint à lancer
+# au démaragge du container
+EXPOSE ..
+EXPOSE ..
+ENTRYPOINT ["./ip.sh"]
