@@ -13,4 +13,4 @@ RUN pip install -r requirements.txt
 # au démaragge du container
 EXPOSE ..
 EXPOSE ..
-ENTRYPOINT ["./ip.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
