@@ -1,6 +1,6 @@
 FROM python:3.8-alpine
 # Copie des fichiers d'applicatif et entrypoint
-COPY main.py requirements.txt entrypoint.sh .
+COPY main.py requirements.txt entrypoint.sh ./
 # Mise à jour du dépôt et des paquets
 RUN apk update && apk upgrade
 # Installation des paquets essentiels
@@ -11,6 +11,6 @@ COPY filetamponsyslog-ng.conf /etc/syslog-ng/syslog-ng.conf
 RUN pip install -r requirements.txt
 # Définition de l'entrypoint à lancer
 # au démaragge du container
-EXPOSE ..
-EXPOSE ..
+#EXPOSE ..
+#EXPOSE ..
 ENTRYPOINT ["./entrypoint.sh"]
