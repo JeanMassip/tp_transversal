@@ -11,4 +11,4 @@ dns1=192.168.1.3
 dns2=1.1.1.1
 image=$2
 
-sudo docker run -d --hostname $hostname --cap-add=NET_ADMIN --log-driver syslog --log-opt syslog-address=tcp://192.168.1.3:1450 --dns-search $dnssearch --dns $dns1 --dns $dns2 --name $hostname $image
+sudo docker run -d --hostname $hostname --cap-add=NET_ADMIN --log-driver syslog --log-opt syslog-address=tcp://192.168.1.3:1452 --dns-search $dnssearch --dns $dns1 --dns $dns2 --name $hostname $image
