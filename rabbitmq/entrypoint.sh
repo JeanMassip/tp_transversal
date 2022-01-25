@@ -3,6 +3,10 @@
 ip a flush eth0
 ip a add 192.168.1.10/24 dev eth0
 ip r add default via 192.168.1.1 dev eth0
+echo '127.0.0.1	localhost' > /etc/hosts
+echo '::1	localhost' >> /etc/hosts
+echo '192.168.1.10	rabbitmq' >> /etc/hosts
 # Lancement de l'application et service actif du container
 # python ./app.py
-tail -f /dev/null
+#tail -f /dev/null
+rabbitmq-server

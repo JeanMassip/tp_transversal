@@ -31,7 +31,7 @@ class Vehicule:
         self.client = mqtt.Client(f'mqtt-station-{stationID}')
         #client.username_pw_set(username, password)
         self.client.on_connect = on_connect
-        self.client.connect(broker, port)
+        self.client.connect("192.168.0.2", port)
 
     def __del__(self):
         self.client.disconnect()

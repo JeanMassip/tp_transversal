@@ -13,11 +13,11 @@ def main():
         cam_queue = queue.Queue()
         denm_queue = queue.Queue()
 
-        cam_receiver = Receiver("localhost", cam_queue)
-        denm_receiver = Receiver("localhost", denm_queue)
+        cam_receiver = Receiver("mosquitto", cam_queue)
+        denm_receiver = Receiver("mosquitto", denm_queue)
 
-        cam_handler = CAMHandler("localhost", 1883, cam_queue)
-        denm_handler = DENMHandler("localhost", 1883, denm_queue)
+        cam_handler = CAMHandler("mosquitto", 1883, cam_queue)
+        denm_handler = DENMHandler("mosquitto", 1883, denm_queue)
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
             logging.info("Starting receiver threads...")

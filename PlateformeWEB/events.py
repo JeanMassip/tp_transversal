@@ -8,11 +8,12 @@ events = Blueprint(__name__, "events")
 
 @events.route("/")
 def home():
-    r = requests.get("http://127.0.0.1:5000/events")
+    r = requests.get("http://apibdd:5000/events")
     if r.ok:
         return render_template("events.html", data=r.json())
     else:
         return "Sorry, something went wrong... Try again later !"
+
 
 @events.route("/<id>")
 def event(id):

@@ -6,10 +6,10 @@ def main():
     client = mqtt_client.Client("FileTampon")
     client.on_connect = on_connect
     client.on_message = on_message
-    client.connect()
+    client.connect("mosquitto")
     client.subscribe("/denm/save")
     logging.info("started listening for messages on /denm/save")
-    client.loop_start()
+    client.loop_forever()
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -18,9 +18,8 @@ def on_connect(client, userdata, flags, rc):
         logging.error("Failed to connect, return code %d\n", rc)
 
 def on_message(client, userdata, msg):
-    logging.DEBUG("MESSAGE RECEIVED")
     message = msg.payload.decode("utf-8")
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
     channel = connection.channel()
     channel.queue_declare(queue='denm_save')
     channel.basic_publish(exchange='', routing_key='denm_save', body=message)

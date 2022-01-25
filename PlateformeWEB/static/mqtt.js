@@ -1,5 +1,5 @@
 const clientId = 'mqttjs'
-const host = 'ws://localhost:9001/mqtt'
+const host = 'ws://mosquitto:9001/ws'
 
 const options = {
   keepalive: 60,
@@ -26,8 +26,8 @@ client.on('error', (err) => {
 })
 
 client.on('connect', () => {
-    console.log('Client connected:' + clientId)
-    client.subscribe('/denm/latest', { qos: 0 })
+  console.log('Client connected:' + clientId)
+  client.subscribe('/denm/latest', { qos: 0 })
 })
 
 client.on('reconnect', () => {
@@ -35,5 +35,5 @@ client.on('reconnect', () => {
 })
 
 client.on('message', (topic, message, packet) => {
-    console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
+  console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
 })
