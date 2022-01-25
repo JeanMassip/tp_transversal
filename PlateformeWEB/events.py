@@ -1,8 +1,6 @@
-
 from flask import Blueprint
 from flask.templating import render_template
 import requests
-
 events = Blueprint(__name__, "events")
 
 
@@ -10,7 +8,8 @@ events = Blueprint(__name__, "events")
 def home():
     r = requests.get("http://apibdd:5000/events")
     if r.ok:
-        return render_template("events.html", data=r.json())
+        data = r.json()
+        return render_template("events.html", data=data)
     else:
         return "Sorry, something went wrong... Try again later !"
 

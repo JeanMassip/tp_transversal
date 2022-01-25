@@ -13,7 +13,7 @@ def get_events():
     events = collection.find()
     for event in events:
         event["_id"] = str(event["_id"])
-        result.append(event)
+        result.append(event["message"])
 
     return jsonify(result)
 

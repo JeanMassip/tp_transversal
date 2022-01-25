@@ -4,7 +4,6 @@ import threading
 import json
 import datetime
 import random
-from tkinter.font import NORMAL
 
 from paho.mqtt import client as mqtt_client
 from enum import IntEnum
@@ -121,28 +120,26 @@ class CAMHandler:
                 self.vehicules[vehicule_id] = msg
 
             self.vehicules[vehicule_id]["last_seen"] = datetime.datetime.now()
-            self.vehicules[vehicule_id]["slowed"] = False
+            if self.vehicules[vehicule_id]["speed"] >= 80:
+                self.vehicules[vehicule_id]["slowed"] = False
+            else:
+                self.vehicules[vehicule_id]["slowed"] = True
 
-            self.purge_vehicules()
             self.check_speed()
 
     def check_speed(self) -> None:
+        nbslowed = 0
         for key, vehicule in self.vehicules.items():
-            if vehicule["speed"] >= 80 and vehicule["slowed"] == True:
-                vehicule["slowed"] = False
-                self.nb_slowed += 1
-
             if vehicule["speed"] < 80:
-                vehicule["slowed"] = True
-                self.nb_slowed += 1
+                nbslowed += 1
+        print(nbslowed)
+        if nbslowed > 2 and not self.slowed:
+            self.slowed = True
+            self.send_slowed_event(key)
 
-            if self.nb_slowed > 2 and not self.slowed:
-                self.slowed = True
-                self.send_slowed_event(key)
-
-            if self.nb_slowed < 2 and self.slowed:
-                self.slowed = False
-                self.send_normal_event(key)
+        if nbslowed <= 2 and self.slowed:
+            self.slowed = False
+            self.send_normal_event(key)
 
     def purge_vehicules(self) -> None:
         now = datetime.datetime.now()
@@ -152,19 +149,22 @@ class CAMHandler:
             if ((now - last_seen).seconds) > 15:
                 toDelete.append(key)
 
-        for _, key in toDelete:
+        for key in toDelete:
             del self.vehicules[key]
 
     def send_slowed_event(self, index) -> None:
         logging.info("Sending Trafic JAM Event")
         logging.debug(self.vehicules[index])
+        now = datetime.datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         message = {
             "message": {
                 "station_id": self.vehicules[index]["station_id"],
                 "station_type": self.vehicules[index]["station_type"],
                 "cause_code": DENMEvent.TRAFFICJAM,
                 "cause_name": "Ralentissements",
-                "position": "une position"
+                "position": "une position",
+                "time": dt_string
             }
         }
 

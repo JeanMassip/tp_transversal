@@ -13,14 +13,14 @@ gateway="192.168.0.1"
 # récupération du pid du container
 pid=`sudo docker inspect -f '{{.State.Pid}}' $container`
 
-echo $pid
+#echo $pid
 # Lien symbolique pour avoir accès
 # aux namespaces docker
 sudo ln -s /var/run/docker/netns/ /var/run/netns
 
 # Identification du namespace du container
 netns=`sudo ip netns identify $pid`
-echo $netns
+
 #echo $netns
 # Assignation des noms à donner
 # aux veth

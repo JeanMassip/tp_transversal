@@ -1,20 +1,29 @@
-import pika, sys, os, logging, requests
+import pika
+import json
+import logging
+import requests
+
 
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host='rabbitmq'))
     channel = connection.channel()
     channel.queue_declare(queue='denm_save')
-    channel.basic_consume(queue='denm_save', on_message_callback=callback, auto_ack=True)
+    channel.basic_consume(
+        queue='denm_save', on_message_callback=callback, auto_ack=True)
     logging.info("Started consumming on denm_save")
     channel.start_consuming()
 
+
 def callback(ch, method, properties, body):
     logging.info("message received")
-    res = requests.post("http://apibdd:5000/events", data=body)
+    data = json.loads(body)
+    res = requests.post("http://apibdd:5000/events", json=data)
     if res.ok:
         logging.info("Event stored in db")
     else:
         logging.error("Could not store event in db")
+
 
 if __name__ == "__main__":
     format = "%(asctime)s: %(message)s"

@@ -4,10 +4,10 @@
   <table class="table is-fullwidth">
     <thead>
       <tr>
-        <th>ID Database</th>
         <th>Station ID</th>
         <th>Station Type</th>
         <th>Cause Code</th>
+        <th>Cause Name</th>
         <th>Postion GPS</th>
       </tr>
     </thead>
@@ -15,7 +15,7 @@
       {% for event in data %}
       <tr>
         {% for key, value in event.items() %}
-          <td>{{value}}</td>
+        <td>{{value}}</td>
         {% endfor %}
       </tr>
       {% endfor %}
