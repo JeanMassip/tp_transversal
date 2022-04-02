@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3
 ##################################
 # Programme qui permet de créer
 # un CSR (Certificate Signing

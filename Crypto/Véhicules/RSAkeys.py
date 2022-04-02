@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3
 ########################################
 # Pogramme de génération de la paire de
 # clé Privée/Publique RSA d'une taille

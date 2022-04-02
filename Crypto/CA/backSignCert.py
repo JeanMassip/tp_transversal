@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3
 ####################################
 # Programme qui va extraire les
 # informations nécéssairs à partir

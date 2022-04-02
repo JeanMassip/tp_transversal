@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3
 #######################################
 # Programme qui va générer une paire
 # de clés RSA pour le CA et les
