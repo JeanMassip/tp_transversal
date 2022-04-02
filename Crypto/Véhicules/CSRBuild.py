@@ -133,8 +133,7 @@ def savecsrtodisk(request):
 	else:
 		return "[+] Le CSR a été générée dans le fichier " + csr_file
 
-
-''' Envoie du CSR qui vient d'être généré au CA '''
+''' Envoie du CSR qui vient d'être généré au CA 
 
 def sendcsrtoca(csr,caadress,endpoint):
 	csrurl="http://ca.projet.local/csr"
@@ -146,6 +145,8 @@ def sendcsrtoca(csr,caadress,endpoint):
 
 	return crturl
 
+'''
+
 # Comment on s'assure que seul se véhicule peut aller télécharger le certificat ?
 # Etant donné que c'est du HTTP, n'importe qui qui sniff le traffic et récupère
 # l'URL du CRT peut aller télécharger le CRT
@@ -153,7 +154,7 @@ def sendcsrtoca(csr,caadress,endpoint):
 # Comment le véhicule peut faire confiance à ce certificat ?
 # On fera mieux de passer en un envoie manuel par FTP entre le CA et les véhicules 
 
-''' Téléchargement du CRT signé par le CA '''
+''' Téléchargement du CRT signé par le CA
 
 def downloadcrt(caadress,crturl):
 
@@ -164,7 +165,7 @@ def downloadcrt(caadress,crturl):
 		crtfileobj.write(crt)
 		crtfileobj.close()
 
-
+'''
 
 ######### APPEL DES FONCTIONS ##############
 load_dotenv()
