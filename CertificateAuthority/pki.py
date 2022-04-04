@@ -10,9 +10,6 @@ def sign_csr(csr: CertificateSigningRequest, ca_public_key, ca_private_key):
     valid_until = valid_from + timedelta(days=30)
     serial_number = x509.random_serial_number()
 
-#    with open("certified_vehicules.txt", "wb") as vehiculesFile:
-#       vehiculesFile.write(f'{serial_number}\t{csr.subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0]}')
-
     builder = (
         x509.CertificateBuilder()
         .subject_name(csr.subject)
