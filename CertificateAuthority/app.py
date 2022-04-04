@@ -6,14 +6,14 @@ from cryptography.hazmat.primitives import serialization
 from getpass import getpass
 from pki import sign_csr
 
-app = Flask()
+app = Flask("__name__")
 
 @app.post("/sign_csr")
-def sign_csr():
+def sign_csr_request():
     csr_file = request.get_data(as_text=False)
     csr = x509.load_pem_x509_csr(csr_file, default_backend())
 
-    ca_public_key_file = open("ca-public-key.pem", "rb")
+    ca_public_key_file = open("CAcrt.pem", "rb")
     ca_public_key = x509.load_pem_x509_certificate(ca_public_key_file.read(), default_backend())
 
     ca_private_key_file = open("ca-private-key.pem", "rb")
@@ -24,6 +24,5 @@ def sign_csr():
 
 
 
-
-if __name__ == "__name__":
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", debug=True)
