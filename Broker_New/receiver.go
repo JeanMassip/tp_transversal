@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
 
@@ -13,15 +14,17 @@ type Receiver struct {
 	MessageHandler        func(client mqtt.Client, msg mqtt.Message)
 	ConnectHandler        func(client mqtt.Client)
 	ConnectionLostHandler func(client mqtt.Client, err error)
+	cancelFunc            context.CancelFunc
 }
 
-func New() (*Receiver, error) {
+func NewReceiver() (*Receiver, error) {
 	r := Receiver{
 		MessageChan: make(chan *string),
 	}
 
 	r.ConnectionLostHandler = func(client mqtt.Client, err error) {
 		fmt.Printf("Connection to Broker lost : %v\n", err)
+		r.cancelFunc()
 		close(r.MessageChan)
 	}
 
@@ -38,7 +41,7 @@ func New() (*Receiver, error) {
 	return &r, nil
 }
 
-func (r Receiver) Connect() {
+func (r *Receiver) Connect() context.Context {
 	var broker = "mosquitto"
 	var port = 1883
 	opts := mqtt.NewClientOptions()
@@ -51,4 +54,26 @@ func (r Receiver) Connect() {
 	if token := r.Client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	r.cancelFunc = cancel
+	return ctx
+}
+
+func (r *Receiver) Subscribe(topic string) {
+	token := r.Client.Subscribe(topic, 0, nil)
+	token.Wait()
+	fmt.Printf("Subscribed to %s \n", topic)
+}
+
+func (r *Receiver) Unsubscribe(topic string) {
+	r.cancelFunc()
+	token := r.Client.Unsubscribe(topic)
+	token.Wait()
+	fmt.Printf("Unsubscribed from %s \n", topic)
+}
+
+func (r *Receiver) Disconnect() {
+	r.cancelFunc()
+	r.Client.Disconnect(2500)
 }
