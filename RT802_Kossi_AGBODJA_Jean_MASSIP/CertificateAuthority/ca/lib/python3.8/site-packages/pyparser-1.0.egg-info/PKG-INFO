@@ -1,0 +1,20 @@
+Metadata-Version: 1.1
+Name: pyparser
+Version: 1.0
+Summary: pyparser is a collection of classes to make it easier to parse text datain a pythonic way.
+Home-page: http://bitbucket.org/rw_grim/pyparser
+Author: Gary Kramlich
+Author-email: grim@reaperworld.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
