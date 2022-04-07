@@ -189,7 +189,7 @@ def fillcertificate(one_day):
 	# certificats
 
 	certificatebuilder = certificatebuilder.add_extension(
-						x509.BasicConstraints(ca=False, path_length=None),critical=True)
+						x509.BasicConstraints(ca=True, path_length=None),critical=True)
 
 	return certificatebuilder
 
