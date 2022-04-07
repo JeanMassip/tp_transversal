@@ -1,4 +1,4 @@
-package main
+package receiver
 
 import (
 	"context"
@@ -17,7 +17,7 @@ type Receiver struct {
 	cancelFunc            context.CancelFunc
 }
 
-func NewReceiver() (*Receiver, error) {
+func New() (*Receiver, error) {
 	r := Receiver{
 		MessageChan: make(chan *string),
 	}
@@ -42,10 +42,8 @@ func NewReceiver() (*Receiver, error) {
 }
 
 func (r *Receiver) Connect() context.Context {
-	var broker = "mosquitto"
-	var port = 1883
 	opts := mqtt.NewClientOptions()
-	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", broker, port))
+	opts.AddBroker("tcp://127.0.0.1:1883")
 	opts.SetClientID(fmt.Sprintf("receiver-%d", rand.Intn(1000)))
 	opts.SetDefaultPublishHandler(r.MessageHandler)
 	opts.OnConnect = r.ConnectHandler

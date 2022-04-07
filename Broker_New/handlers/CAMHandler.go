@@ -18,7 +18,7 @@ type CAMHandler struct {
 
 func NewCAMHandler() *CAMHandler {
 	opts := mqtt.NewClientOptions()
-	opts.AddBroker("tcp://mosquitto:1883")
+	opts.AddBroker("tcp://127.0.0.1:1883")
 	opts.SetClientID(fmt.Sprintf("handler-%d", rand.Intn(1000)))
 	client := mqtt.NewClient(opts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
@@ -39,12 +39,15 @@ func (handler *CAMHandler) HandleMessage(message string) error {
 		return err
 	}
 
+	fmt.Println("Sensors Message Received - Handling...")
+
 	if vec, ok := handler.Vehicules[vehicule.StationID]; ok {
 		vec.LastSeen = time.Now().UTC().String()
 		vec.Speed = vehicule.Speed
 		vec.Heading = vehicule.Heading
 		vec.Position = vehicule.Position
 		handler.CheckSpeed()
+		fmt.Println("Message Handled")
 	}
 
 	return nil
