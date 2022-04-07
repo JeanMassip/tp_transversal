@@ -113,3 +113,7 @@ func (handler *CAMHandler) SendNormalEvent(index string) error {
 
 	return nil
 }
+
+func (handler *CAMHandler) AddVehicule(vec Vehicule) {
+	handler.Vehicules[vec.StationID] = vec
+}

@@ -1,10 +1,62 @@
 package main
 
 import (
-	"context"
+	"io"
 	"jk/broker/handlers"
+	"jk/broker/pki"
 	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
 )
+
+func main() {
+
+	broker, err := NewBroker()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	router := mux.NewRouter()
+	router.HandleFunc("/auth", func(w http.ResponseWriter, r *http.Request) {
+		cert, err := io.ReadAll(r.Body)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("No certificate provided"))
+			return
+		}
+
+		cn, err := pki.ValidateCertificate(cert)
+		if err != nil {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			w.Write([]byte("Invalid certificate"))
+			return
+		}
+
+		vec := handlers.Vehicule{StationID: cn}
+		broker.AddVehiculeToHandler(vec)
+
+		w.WriteHeader(http.StatusAccepted)
+		w.Write([]byte("Vehicule authenticated"))
+	})
+
+	go broker.Start()
+	if err := http.ListenAndServe("0.0.0.0:5000", router); err != nil {
+		log.Fatal(err)
+	}
+	/*
+		validCert, err := ioutil.ReadFile("VecCERT.pem")
+		if err != nil {
+			panic(err)
+		}
+
+		cn, err := pki.ValidateCertificate(validCert)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(cn)
+	*/
+}
 
 type Broker struct {
 	CAMReceiver  Receiver
@@ -12,18 +64,6 @@ type Broker struct {
 
 	CAMHandler  handlers.CAMHandler
 	DENMHandler handlers.DENMHandler
-}
-
-func main() {
-	broker, err := NewBroker()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	broker.Start(ctx)
 }
 
 func NewBroker() (*Broker, error) {
@@ -45,7 +85,7 @@ func NewBroker() (*Broker, error) {
 	}, nil
 }
 
-func (b Broker) Start(ctx context.Context) {
+func (b Broker) Start() {
 	camContext := b.CAMReceiver.Connect()
 	defer b.CAMReceiver.Disconnect()
 
@@ -71,4 +111,8 @@ func (b Broker) Start(ctx context.Context) {
 			return
 		}
 	}
+}
+
+func (b Broker) AddVehiculeToHandler(vec handlers.Vehicule) {
+	b.CAMHandler.AddVehicule(vec)
 }
