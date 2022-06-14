@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 ##################################
-# Programme qui permet de créer
-# un CSR (Certificate Signing
-# Request) à envoyer à l'autorite
-# de certification puis récupération
-# en retour du certificat signé par
-# l'autorite de certification
+# Programme qui permet de charger
+# un CSR depuis un fichier sur
+# disque et de l'envoyer a un CA
+# pour signature. Le CA fournit en
+# reponse le certficat signe qui
+# sera enregistre sur disque par
+# le vehicule
 ##################################
 
 # Importation des modules #

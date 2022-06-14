@@ -2,8 +2,8 @@
 ##################################
 # Programme qui permet de créer
 # un CSR (Certificate Signing
-# Request) à envoyer à l'autorite
-# de certification
+# Request) et de l'enregistrer sur 
+# disque
 ##################################
 
 # Importation des modules #
@@ -132,40 +132,6 @@ def savecsrtodisk(request):
 
 	else:
 		return "[+] Le CSR a été générée dans le fichier " + csr_file
-
-''' Envoie du CSR qui vient d'être généré au CA 
-
-def sendcsrtoca(csr,caadress,endpoint):
-	csrurl="http://ca.projet.local/csr"
-	data=
-    	response=requests.post(csrurl,data=csr)
-
-
-	crturl=response.text "http://ca.projet.local/crt"
-
-	return crturl
-
-'''
-
-# Comment on s'assure que seul se véhicule peut aller télécharger le certificat ?
-# Etant donné que c'est du HTTP, n'importe qui qui sniff le traffic et récupère
-# l'URL du CRT peut aller télécharger le CRT
-# Si on fait du HTTPS, d'où vient le certificat qui est utilisé pour faire du HTTPS ?
-# Comment le véhicule peut faire confiance à ce certificat ?
-# On fera mieux de passer en un envoie manuel par FTP entre le CA et les véhicules 
-
-''' Téléchargement du CRT signé par le CA
-
-def downloadcrt(caadress,crturl):
-
-	crt=requests.get(crturl)
-
-	# Write CRT to file
-	with open(crtfile) as crtfileobj:
-		crtfileobj.write(crt)
-		crtfileobj.close()
-
-'''
 
 ######### APPEL DES FONCTIONS ##############
 load_dotenv()
