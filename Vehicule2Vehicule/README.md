@@ -18,4 +18,9 @@ avant initiation d'une communication
 [4] Vehicule2Vehicule.py permet l'envoie de du certificat signe au vehicule pair, puis,
 si le certificat est valide par le vehicule pair, alors, on peut envoyer les messages MQTT 
 
-[x] Il faut coder la verification de certificat des pairs
+
+[x] Il faut coder la verification de certificat des pairs, comment on fait ?, Une partie
+est en Go et l'autre partie est en Python.
+
+[x] Il faudrait modifier le code pour que la verification des signatures soite faite par les
+2 vehicules qui souihaitent communiquer avant envoie de messages MQTT
